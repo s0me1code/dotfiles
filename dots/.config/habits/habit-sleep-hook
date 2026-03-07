@@ -23,8 +23,7 @@ case "$1" in
         sudo -u "$HYPR_USER" \
             HOME="$HYPR_HOME" \
             XDG_RUNTIME_DIR="$XDG_RT" \
-            HABIT_CONFIG_DIR="$HYPR_HOME/.config/habits" \
-            python3 "$HYPR_HOME/.config/habits/habit-clock.py" clockout 2>/dev/null || true
+            "$HYPR_HOME/.config/habits/habit-tracker" clockout 2>/dev/null || true
         ;;
 
     post)

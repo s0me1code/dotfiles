@@ -23,7 +23,7 @@ Item {
 
     Process {
         id: statusProc
-        command: ["python3", Quickshell.env("HOME") + "/.config/habits/habit-clock.py", "status"]
+        command: [Quickshell.env("HOME") + "/.config/habits/habit-tracker", "status"]
         property string buffer: ""
         stdout: SplitParser {
             onRead: data => { statusProc.buffer += data; }
@@ -46,7 +46,7 @@ Item {
 
     Process {
         id: todayProc
-        command: ["python3", Quickshell.env("HOME") + "/.config/habits/habit-clock.py", "today"]
+        command: [Quickshell.env("HOME") + "/.config/habits/habit-tracker", "today"]
         property string buffer: ""
         stdout: SplitParser {
             onRead: data => { todayProc.buffer += data + "\n"; }

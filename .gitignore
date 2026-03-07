@@ -20,6 +20,7 @@ __pycache__/
 dots/.config/tmux/plugins/
 dots/.config/nvim/logfile
 
-# Habit tracker runtime state and archives
+# Habit tracker runtime state, archives, and compiled binary
 dots/.config/habits/state/
 dots/.config/habits/archive/
+dots/.config/habits/habit-tracker

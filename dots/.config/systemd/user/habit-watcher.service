@@ -8,9 +8,8 @@ StartLimitBurst=5
 [Service]
 Type=simple
 ExecStartPre=/usr/bin/sleep 2
-ExecStart=%h/.config/habits/habit-daemon.sh
-ExecStop=/usr/bin/python3 %h/.config/habits/habit-clock.py clockout
-Environment=HABIT_CONFIG_DIR=%h/.config/habits
+ExecStart=%h/.config/habits/habit-tracker daemon
+ExecStop=%h/.config/habits/habit-tracker clockout
 Restart=on-failure
 RestartSec=3
 PassEnvironment=HYPRLAND_INSTANCE_SIGNATURE XDG_RUNTIME_DIR DISPLAY WAYLAND_DISPLAY

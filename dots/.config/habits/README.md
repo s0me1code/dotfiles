@@ -1,47 +1,68 @@
 # Habit Tracker
 
-Automatic time tracking for Hyprland. Watches which window is focused, matches it against task patterns, and records [org-mode CLOCK entries](https://orgmode.org/manual/Clocking-Work-Time.html) — all without Emacs.
+Automatic time tracking for Hyprland. Watches which window is focused, matches it against task patterns, and records [org-mode CLOCK entries](https://orgmode.org/manual/Clocking-Work-Time.html) -- all without Emacs.
 
 ## How It Works
 
 ```
-Hyprland socket2 ──events──▶ habit-daemon.sh ──calls──▶ habit-clock.py ──writes──▶ Habits.org
-                                    │
-                                    ▼
-                               notify-send
+Hyprland socket2 ──events──> habit-tracker daemon ──writes──> Habits.org
+       |                            |
+Hyprland socket  <──queries─────────┘
+       |                            |
+       └────────────────────────────└──> notify-send
 ```
 
-1. **habit-daemon.sh** connects to Hyprland's IPC socket (`.socket2.sock`) via `socat` and listens for window events.
-2. When the focused window changes, it calls **habit-clock.py match** with the window title.
-3. If the title matches a task's `HYPR_PATTERN` regex, it clocks in. If the task changes, it clocks out the old one first.
+A single Go binary (`habit-tracker`) handles everything:
+
+1. The **daemon** subcommand connects to Hyprland's IPC sockets using [hyprland-go](https://github.com/thiagokokada/hyprland-go) and listens for window events.
+2. When the focused window changes, it matches the title against task `HYPR_PATTERN` regexes.
+3. If the task changes, it clocks out the old one and clocks in the new one.
 4. CLOCK entries are written directly into **Habits.org** inside each task's `:LOGBOOK:` drawer.
 5. Desktop notifications are sent on clock-in/out via `notify-send`.
 
 ### State Reducer
 
-The daemon keeps track of the last matched task. Repeated `activewindow` events for the same task are ignored — clock-in/out only fires when the matched task actually changes. This keeps CPU usage near zero during normal use.
+The daemon keeps track of the last matched task. Repeated `activewindow` events for the same task are ignored -- clock-in/out only fires when the matched task actually changes. This keeps CPU usage near zero during normal use.
 
 ### Events Handled
 
 | Event | Action |
 |---|---|
 | `activewindow` | Match title against patterns, clock in/out as needed |
-| `closewindow` | Query the new active window via `hyprctl`, re-evaluate |
+| `closewindow` | Query the new active window via hyprland-go `RequestClient`, re-evaluate |
 | `lockscreen` | Clock out the current task |
 | `unlockscreen` | Query active window, clock in if it matches |
+
+### hyprland-go Integration
+
+The daemon uses [hyprland-go](https://github.com/thiagokokada/hyprland-go) v0.4.1 following the library's patterns:
+
+- `event.MustClient()` + `event.DefaultEventHandler` embedding for typed event handling
+- `hyprland.MustClient()` + `c.ActiveWindow()` for querying the focused window (replaces `hyprctl` subprocess calls)
+- `c.Subscribe(ctx, handler, ...)` as the main blocking event loop
+- `context.WithCancel` + `signal.Notify` for clean SIGTERM/SIGINT/SIGHUP shutdown
+
+Lock/unlock events (not yet in hyprland-go's typed event set) are handled by a lightweight goroutine reading raw socket2 lines.
 
 ## Files
 
 ```
 ~/.config/habits/
 ├── Habits.org              # Task definitions + CLOCK entries
-├── habit-clock.py          # CLI for org-mode manipulation
-├── habit-daemon.sh         # Hyprland event listener daemon
+├── habit-tracker           # Go binary (all CLI + daemon)
 ├── habit-sleep-hook        # Systemd sleep/wake hook (install to /usr/lib/systemd/system-sleep/)
+├── src/                    # Go source code
+│   ├── go.mod
+│   ├── go.sum
+│   ├── main.go             # CLI dispatch
+│   ├── org.go              # Org file parsing, atomic writes
+│   ├── clock.go            # clockin/clockout/status/today/archive
+│   ├── daemon.go           # hyprland-go event handler + lock watcher
+│   └── notify.go           # notify-send wrapper
 ├── state/                  # Runtime state (gitignored)
 │   ├── active_task         # Current task name + timestamp
 │   └── daemon.log          # Daemon log
-└── archive/                # Old CLOCK entries moved here by `archive` command (gitignored)
+└── archive/                # Old CLOCK entries (gitignored)
     └── clock-YYYY.org
 
 ~/.config/systemd/user/
@@ -79,34 +100,44 @@ To add a new task, add a `** Task Name` heading with a `:HYPR_PATTERN:` property
 ## CLI Usage
 
 ```
-habit-clock.py match   <window_title>   # Print matched task name (or empty)
-habit-clock.py clockin <task name>      # Open a CLOCK entry, write state file
-habit-clock.py clockout                 # Close the open CLOCK entry, delete state file
-habit-clock.py status                   # Print "Task Name | H:MM" or "idle"
-habit-clock.py today   [task name]      # Print today's totals
-habit-clock.py archive                  # Move old entries to archive/clock-YYYY.org
+habit-tracker match   <window_title>   # Print matched task name (or empty)
+habit-tracker clockin <task name>      # Open a CLOCK entry, write state file
+habit-tracker clockout                 # Close the open CLOCK entry, delete state file
+habit-tracker status                   # Print "Task Name | H:MM" or "idle"
+habit-tracker today   [task name]      # Print today's totals
+habit-tracker archive                  # Move old entries to archive/clock-YYYY.org
+habit-tracker daemon                   # Run the Hyprland event listener
 ```
 
 ### Examples
 
 ```bash
 # What task matches this window?
-python3 ~/.config/habits/habit-clock.py match "README.md — Cursor"
+~/.config/habits/habit-tracker match "README.md — Cursor"
 # → Coding / Cursor
 
 # What am I working on right now?
-python3 ~/.config/habits/habit-clock.py status
+~/.config/habits/habit-tracker status
 # → Coding / Cursor | 1:23
 
 # How much time today?
-python3 ~/.config/habits/habit-clock.py today
+~/.config/habits/habit-tracker today
 #   Browser Research: 0h 45m
 #   Coding / Cursor: 2h 10m
 
 # Move old entries out of Habits.org
-python3 ~/.config/habits/habit-clock.py archive
+~/.config/habits/habit-tracker archive
 # Archived 47 CLOCK entries to archive/ (years: 2026)
 ```
+
+## Building from Source
+
+```bash
+cd ~/.config/habits/src
+go build -o ../habit-tracker .
+```
+
+Requires Go 1.21+. Single dependency: `github.com/thiagokokada/hyprland-go v0.4.1`.
 
 ## Systemd Service
 
@@ -114,8 +145,8 @@ The daemon runs as a systemd user service that starts with the graphical session
 
 ```ini
 [Service]
-ExecStart=%h/.config/habits/habit-daemon.sh
-ExecStop=/usr/bin/python3 %h/.config/habits/habit-clock.py clockout
+ExecStart=%h/.config/habits/habit-tracker daemon
+ExecStop=%h/.config/habits/habit-tracker clockout
 Restart=on-failure
 PassEnvironment=HYPRLAND_INSTANCE_SIGNATURE XDG_RUNTIME_DIR DISPLAY WAYLAND_DISPLAY
 ```
@@ -169,20 +200,14 @@ Deployed via the end-4 dotfiles install system (`./setup install`). The entry in
   mode: "soft-backup"
 ```
 
-The `state/` and `archive/` directories are gitignored since they contain runtime data.
+The `state/`, `archive/`, and `habit-tracker` binary are gitignored.
 
-## Dependencies
+## Resource Usage
 
-- **socat** — connects to Hyprland's Unix socket (`pacman -S socat`)
-- **python3** — standard library only, no pip packages
-- **hyprctl** — ships with Hyprland, used to query active window on `closewindow`/`unlockscreen`
-- **notify-send** — desktop notifications (usually provided by `libnotify`)
+Measured via systemd:
 
-## Planned: Go Rewrite
+- **Memory**: ~5-6 MB (single Go binary, no child processes)
+- **CPU**: 14ms total at startup, near-zero idle
+- **Disk**: One small org file write per window switch
 
-The system is being rewritten into a single Go binary (`habit-tracker`) using [hyprland-go](https://github.com/thiagokokada/hyprland-go) for native Hyprland IPC. This will:
-
-- Eliminate the `socat` and `python3` dependencies.
-- Replace three processes (bash + socat + python) with one ~5MB static binary.
-- Remove per-event Python startup overhead (~30ms each).
-- Handle socket connections natively via hyprland-go's `EventClient` and `RequestClient`.
+Compared to the previous Python+bash implementation (bash + socat + python3 spawns per event), this is a single process with no subprocess overhead.
