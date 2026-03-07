@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "GitKraken": {
+      "command": "/home/someone/.config/Cursor/User/globalStorage/eamodio.gitlens/gk",
+      "type": "stdio",
+      "name": "GitKraken",
+      "args": [
+        "mcp",
+        "--host=cursor",
+        "--source=gitlens",
+        "--scheme=cursor"
+      ],
+      "env": {}
+    }
+  }
+}

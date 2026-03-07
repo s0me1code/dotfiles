@@ -1,0 +1,335 @@
+{
+  "vim.leader": " ",
+  "vim.hlsearch": false,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.smartIndent": true,
+  "vim.visualstar": true,
+  "vim.scrolloff": 8,
+  "vim.updatetime": 50,
+  "vim.handleKeys": {
+    "<C-P>": false,
+  },
+  "editor.lineNumbers": "relative",
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "off",
+  "files.trimTrailingWhitespace": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["J"],
+      "after": ["m", "z", "J", "`", "z"],
+    },
+    {
+      "before": ["<leader>", "p", "v"],
+      "commands": [":Explore"],
+    },
+    {
+      "before": ["n"],
+      "after": ["n", "z", "z", "z", "v"],
+    },
+    {
+      "before": ["N"],
+      "after": ["N", "z", "z", "z", "v"],
+    },
+    {
+      "before": ["<leader>", "o"],
+      "commands": [":only"],
+    },
+    {
+      "before": ["<leader>", "R"],
+      "commands": ["editor.action.startFindReplaceAction"],
+    },
+    {
+      "before": ["<M-j>"],
+      "after": ["<C-d>", "z", "z"],
+    },
+    {
+      "before": ["<M-u>"],
+      "after": ["<C-u>", "z", "z"],
+    },
+    {
+      "before": ["Q"],
+      "after": ["<Nop>"],
+    },
+    {
+      "before": ["g", "d"],
+      "commands": ["editor.action.revealDefinition"],
+    },
+    {
+      "before": ["<M-k>"],
+      "commands": ["editor.action.showHover"],
+    },
+    {
+      "before": ["<leader>", "v", "d"],
+      "commands": ["workbench.actions.view.problems"],
+    },
+    {
+      "before": ["<leader>", "v", "c", "a"],
+      "commands": ["editor.action.quickFix"],
+    },
+    {
+      "before": ["<leader>", "v", "r", "r"],
+      "commands": ["editor.action.referenceSearch.trigger"],
+    },
+    {
+      "before": ["<leader>", "v", "r", "n"],
+      "commands": ["editor.action.rename"],
+    },
+    {
+      "before": ["<leader>", "f"],
+      "commands": ["editor.action.formatDocument"],
+    },
+    {
+      "before": ["[", "d"],
+      "commands": ["editor.action.marker.next"],
+    },
+    {
+      "before": ["]", "d"],
+      "commands": ["editor.action.marker.prev"],
+    },
+    {
+      "before": ["<leader>", "?"],
+      "commands": ["workbench.action.openRecent"],
+    },
+    {
+      "before": ["<leader>", "/"],
+      "commands": ["actions.find"],
+    },
+    {
+      "before": ["<leader>", "s", "f"],
+      "commands": ["workbench.action.quickOpen"],
+    },
+    {
+      "before": ["<leader>", "s", "w"],
+      "commands": [
+        "editor.action.addSelectionToNextFindMatch",
+        "workbench.action.findInFiles",
+      ],
+    },
+    {
+      "before": ["<leader>", "s", "g"],
+      "commands": ["workbench.action.findInFiles"],
+    },
+    {
+      "before": ["<leader>", "s", "d"],
+      "commands": ["workbench.actions.view.problems"],
+    },
+    {
+      "before": ["<leader>", "s", "b"],
+      "commands": ["workbench.action.showAllEditorsByMostRecentlyUsed"],
+    },
+    {
+      "before": ["<leader>", "s", "S"],
+      "commands": ["workbench.view.scm"],
+    },
+    {
+      "before": ["<leader>", "f", "f"],
+      "commands": ["workbench.action.quickOpen"],
+    },
+    {
+      "before": ["<leader>", "f", "g"],
+      "commands": ["workbench.action.findInFiles"],
+    },
+    {
+      "before": ["<leader>", "f", "b"],
+      "commands": ["workbench.action.showAllEditorsByMostRecentlyUsed"],
+    },
+    {
+      "before": ["<leader>", "p", "s"],
+      "commands": ["workbench.action.findInFiles"],
+    },
+    {
+      "before": ["<M-h>"],
+      "commands": ["bookmarks.listFromAllFiles"],
+    },
+    {
+      "before": ["<leader>", "m"],
+      "commands": ["bookmarks.toggle"],
+    },
+    {
+      "before": ["<M-J>"],
+      "commands": ["bookmarks.jumpToNext"],
+    },
+    {
+      "before": ["<M-K>"],
+      "commands": ["bookmarks.jumpToPrevious"],
+    },
+    {
+      "before": ["<C-space>"],
+      "commands": [
+        "editor.action.smartSelect.grow",
+        "editor.action.smartSelect.grow",
+      ],
+    },
+    {
+      "before": ["<C-s>"],
+      "commands": ["editor.action.smartSelect.expand"],
+    },
+    {
+      "before": ["<C-backspace>"],
+      "commands": ["editor.action.smartSelect.shrink"],
+    },
+    {
+      "before": ["<C-S-space>"],
+      "commands": ["editor.action.selectToBracket"],
+    },
+    {
+      "before": ["<leader>", "<leader>"],
+      "commands": ["workbench.action.toggleSidebarVisibility"],
+    },
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": ["J"],
+      "commands": ["editor.action.moveLinesDownAction"],
+    },
+    {
+      "before": ["K"],
+      "commands": ["editor.action.moveLinesUpAction"],
+    },
+    {
+      "before": ["<leader>", "y"],
+      "after": ["\"", "+", "y"],
+    },
+    {
+      "before": ["<leader>", "d"],
+      "after": ["\"", "_", "d"],
+    },
+    {
+      "before": ["<leader>", "p"],
+      "after": ["\"", "_", "d", "P"],
+    },
+    {
+      "before": ["<C-space>"],
+      "commands": ["editor.action.smartSelect.grow"],
+    },
+    {
+      "before": ["<leader>", "<leader>"],
+      "commands": ["workbench.action.toggleSidebarVisibility"],
+    },
+  ],
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "j"],
+      "after": ["<Esc>"],
+    },
+  ],
+  "editor.cursorSurroundingLines": 8,
+  "vim.cursorStylePerMode.normal": "block",
+  "vim.cursorStylePerMode.insert": "line",
+  "vim.cursorStylePerMode.replace": "underline",
+  "vim.cursorStylePerMode.visual": "block",
+  "vim.cursorStylePerMode.visualblock": "block",
+  "vim.cursorStylePerMode.visualline": "block",
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "workbench.layoutControl.enabled": false,
+  "workbench.editor.showTabs": "none",
+  "window.titleBarStyle": "native",
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar",
+  },
+  "workbench.iconTheme": "catppuccin-latte",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "markdown-preview-enhanced.previewTheme": "vue.css",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "explorer.confirmDragAndDrop": false,
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "workbench.editor.editorActionsLocation": "hidden",
+  "cSpell.userWords": ["iban", "packground", "sonner"],
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+  },
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features",
+  },
+  "editor.tabSize": 2,
+  "jupyter.interactiveWindow.creationMode": "perFile",
+  "jupyter.askForKernelRestart": false,
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "redhat.telemetry.enabled": true,
+  "window.menuBarVisibility": "toggle",
+  "explorer.confirmDelete": false,
+  "terminal.integrated.defaultProfile.linux": "fish",
+  "terminal.integrated.defaultProfile.osx": "fish",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+  },
+  "editor.formatOnSave": true,
+  "workbench.colorCustomizations": {
+    "[Vira*]": {
+      "statusBar.debuggingBackground": "#80CBC433",
+      "statusBar.debuggingForeground": "#80CBC4",
+      "toolbar.activeBackground": "#80CBC426",
+      "button.background": "#80CBC4",
+      "button.hoverBackground": "#80CBC4cc",
+      "extensionButton.separator": "#80CBC433",
+      "extensionButton.background": "#80CBC414",
+      "extensionButton.foreground": "#80CBC4",
+      "extensionButton.hoverBackground": "#80CBC433",
+      "extensionButton.prominentForeground": "#80CBC4",
+      "extensionButton.prominentBackground": "#80CBC414",
+      "extensionButton.prominentHoverBackground": "#80CBC433",
+      "activityBarBadge.background": "#80CBC4",
+      "activityBar.activeBorder": "#80CBC4",
+      "activityBarTop.activeBorder": "#80CBC4",
+      "list.inactiveSelectionIconForeground": "#80CBC4",
+      "list.activeSelectionForeground": "#80CBC4",
+      "list.inactiveSelectionForeground": "#80CBC4",
+      "list.highlightForeground": "#80CBC4",
+      "sash.hoverBorder": "#80CBC480",
+      "list.activeSelectionIconForeground": "#80CBC4",
+      "scrollbarSlider.activeBackground": "#80CBC480",
+      "editorSuggestWidget.highlightForeground": "#80CBC4",
+      "textLink.foreground": "#80CBC4",
+      "progressBar.background": "#80CBC4",
+      "pickerGroup.foreground": "#80CBC4",
+      "tab.activeBorder": "#80CBC4",
+      "tab.activeBorderTop": "#80CBC400",
+      "tab.unfocusedActiveBorder": "#80CBC4",
+      "tab.unfocusedActiveBorderTop": "#80CBC400",
+      "tab.activeModifiedBorder": "#80CBC400",
+      "notificationLink.foreground": "#80CBC4",
+      "editorWidget.resizeBorder": "#80CBC4",
+      "editorWidget.border": "#80CBC4",
+      "settings.modifiedItemIndicator": "#80CBC4",
+      "panelTitle.activeBorder": "#80CBC4",
+      "breadcrumb.activeSelectionForeground": "#80CBC4",
+      "menu.selectionForeground": "#80CBC4",
+      "menubar.selectionForeground": "#80CBC4",
+      "editor.findMatchBorder": "#80CBC4",
+      "selection.background": "#80CBC440",
+      "statusBarItem.remoteBackground": "#80CBC414",
+      "statusBarItem.remoteHoverBackground": "#80CBC4",
+      "statusBarItem.remoteForeground": "#80CBC4",
+      "notebook.inactiveFocusedCellBorder": "#80CBC480",
+      "commandCenter.activeBorder": "#80CBC480",
+      "chat.slashCommandForeground": "#80CBC4",
+      "chat.avatarForeground": "#80CBC4",
+      "activityBarBadge.foreground": "#000000",
+      "button.foreground": "#000000",
+      "statusBarItem.remoteHoverForeground": "#000000",
+    },
+  },
+  "material-code.primaryColor": "#2A5973",
+  "workbench.sideBar.location": "right",
+  "git.blame.editorDecoration.enabled": true,
+  "gitlens.currentLine.enabled": false,
+  "workbench.colorTheme": "Cursor Dark High Contrast",
+}

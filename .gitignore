@@ -15,3 +15,7 @@ __pycache__/
 
 # Emacs auto backup file
 *~
+
+# Personal configs (mine branch)
+dots/.config/tmux/plugins/
+dots/.config/nvim/logfile
