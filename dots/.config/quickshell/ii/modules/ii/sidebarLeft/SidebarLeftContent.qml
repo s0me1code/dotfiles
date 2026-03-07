@@ -19,7 +19,8 @@ Item {
     property var tabButtonList: [
         ...(root.aiChatEnabled ? [{"icon": "neurology", "name": Translation.tr("Intelligence")}] : []),
         ...(root.translatorEnabled ? [{"icon": "translate", "name": Translation.tr("Translator")}] : []),
-        ...((root.animeEnabled && !root.animeCloset) ? [{"icon": "bookmark_heart", "name": Translation.tr("Anime")}] : [])
+        ...((root.animeEnabled && !root.animeCloset) ? [{"icon": "bookmark_heart", "name": Translation.tr("Anime")}] : []),
+        {"icon": "history", "name": "Habits"},
     ]
     property int tabCount: swipeView.count
 
@@ -88,6 +89,7 @@ Item {
                     ...(root.translatorEnabled ? [translator.createObject()] : []),
                     ...((root.tabButtonList.length === 0 || (!root.aiChatEnabled && !root.translatorEnabled && root.animeCloset)) ? [placeholder.createObject()] : []),
                     ...(root.animeEnabled ? [anime.createObject()] : []),
+                    habitTracker.createObject(),
                 ]
             }
         }
@@ -103,6 +105,10 @@ Item {
         Component {
             id: anime
             Anime {}
+        }
+        Component {
+            id: habitTracker
+            HabitTracker {}
         }
         Component {
             id: placeholder

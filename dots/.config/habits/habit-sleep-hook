@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+#
+# habit-sleep-hook — systemd sleep/wake hook for habit tracker.
+#
+# Install:
+#   sudo cp ~/.config/habits/habit-sleep-hook /usr/lib/systemd/system-sleep/
+#   sudo chmod +x /usr/lib/systemd/system-sleep/habit-sleep-hook
+#
+# Arguments from systemd: $1 = pre|post, $2 = suspend|hibernate|...
+
+case "$1" in
+    pre)
+        HYPR_PID="$(pgrep -x Hyprland 2>/dev/null | head -1)" || true
+        if [[ -z "$HYPR_PID" ]]; then
+            exit 0
+        fi
+
+        HYPR_USER="$(stat -c '%U' "/proc/$HYPR_PID" 2>/dev/null)" || exit 0
+        HYPR_HOME="$(getent passwd "$HYPR_USER" | cut -d: -f6)"
+        HYPR_UID="$(id -u "$HYPR_USER")"
+        XDG_RT="/run/user/$HYPR_UID"
+
+        sudo -u "$HYPR_USER" \
+            HOME="$HYPR_HOME" \
+            XDG_RUNTIME_DIR="$XDG_RT" \
+            HABIT_CONFIG_DIR="$HYPR_HOME/.config/habits" \
+            python3 "$HYPR_HOME/.config/habits/habit-clock.py" clockout 2>/dev/null || true
+        ;;
+
+    post)
+        HYPR_PID="$(pgrep -x Hyprland 2>/dev/null | head -1)" || true
+        if [[ -z "$HYPR_PID" ]]; then
+            exit 0
+        fi
+
+        HYPR_USER="$(stat -c '%U' "/proc/$HYPR_PID" 2>/dev/null)" || exit 0
+        HYPR_UID="$(id -u "$HYPR_USER")"
+        XDG_RT="/run/user/$HYPR_UID"
+
+        sleep 2
+
+        sudo -u "$HYPR_USER" \
+            XDG_RUNTIME_DIR="$XDG_RT" \
+            DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RT/bus" \
+            systemctl --user restart habit-watcher.service 2>/dev/null || true
+        ;;
+esac
+
+exit 0

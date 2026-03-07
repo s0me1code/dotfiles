@@ -1,0 +1,18 @@
+#+TITLE: Habits & Task Tracker
+#+STARTUP: overview
+
+* Tasks
+** Browser Research
+   :PROPERTIES:
+   :HYPR_PATTERN: Firefox|Brave|Chromium|Zen
+   :DESCRIPTION: Web browsing and research
+   :END:
+   :LOGBOOK:
+   :END:
+** Coding / Cursor
+   :PROPERTIES:
+   :HYPR_PATTERN: Cursor
+   :DESCRIPTION: Coding in Cursor IDE
+   :END:
+   :LOGBOOK:
+   :END:
