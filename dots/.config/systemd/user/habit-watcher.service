@@ -1,0 +1,21 @@
+[Unit]
+Description=Habit Watcher — Hyprland window-focus clock tracker
+After=graphical-session.target
+PartOf=graphical-session.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/sleep 2
+ExecStart=%h/.config/habits/habit-tracker daemon
+ExecStop=%h/.config/habits/habit-tracker clockout
+Restart=on-failure
+RestartSec=3
+PassEnvironment=HYPRLAND_INSTANCE_SIGNATURE XDG_RUNTIME_DIR DISPLAY WAYLAND_DISPLAY
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=habit-watcher
+
+[Install]
+WantedBy=graphical-session.target

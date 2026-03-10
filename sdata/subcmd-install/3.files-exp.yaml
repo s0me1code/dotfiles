@@ -142,3 +142,11 @@ patterns:
   - from: "dots/.cursor/skills"
     to: "$HOME/.cursor/skills"
     mode: "soft"
+  # Habit tracker
+  - from: "dots/.config/habits"
+    to: "$XDG_CONFIG_HOME/habits"
+    mode: "soft-backup"
+    excludes: ["state"]
+  - from: "dots/.config/systemd/user/habit-watcher.service"
+    to: "$XDG_CONFIG_HOME/systemd/user/habit-watcher.service"
+    mode: "soft-backup"
