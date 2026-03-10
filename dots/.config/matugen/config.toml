@@ -32,3 +32,23 @@ output_path = '~/.local/state/quickshell/user/generated/color.txt'
 [templates.wallpaper]
 input_path = '~/.config/matugen/templates/wallpaper.txt'
 output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
+
+[templates.tmux]
+input_path = '~/.config/matugen/templates/tmux/tmux-colors.conf'
+output_path = '~/.config/tmux/matugen-colors.conf'
+
+[templates.fish]
+input_path = '~/.config/matugen/templates/fish/fish-colors.fish'
+output_path = '~/.config/fish/generated-matugen-colors.fish'
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty/kitty-colors.conf'
+output_path = '~/.config/kitty/matugen-colors.conf'
+
+[templates.cursor_dark]
+input_path = '~/.config/matugen/templates/cursor/cursor-dark.json'
+output_path = '~/.local/state/quickshell/user/generated/cursor/cursor-dark.json'
+
+[templates.cursor_light]
+input_path = '~/.config/matugen/templates/cursor/cursor-light.json'
+output_path = '~/.local/state/quickshell/user/generated/cursor/cursor-light.json'

@@ -54,9 +54,18 @@ post_process() {
     local screen_width="$1"
     local screen_height="$2"
     local wallpaper_path="$3"
+    local mode_flag="$4"
 
     handle_kde_material_you_colors &
-    "$SCRIPT_DIR/code/material-code-set-color.sh" &
+    "$SCRIPT_DIR/code/material-code-set-color.sh" "$mode_flag" &
+}
+
+refresh_tmux_colors() {
+    local tmux_theme="$XDG_CONFIG_HOME/tmux/matugen-colors.conf"
+    if [ -f "$tmux_theme" ] && command -v tmux &>/dev/null && tmux ls &>/dev/null; then
+        tmux source-file "$tmux_theme" || true
+        tmux refresh-client -S || true
+    fi
 }
 
 check_and_prompt_upscale() {
@@ -306,12 +315,13 @@ switch() {
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
         > "$STATE_DIR"/user/generated/material_colors.scss
     "$SCRIPT_DIR"/applycolor.sh
+    refresh_tmux_colors
     deactivate
 
     # Pass screen width, height, and wallpaper path to post_process
     max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
     max_height_desired="$(hyprctl monitors -j | jq '([.[].height] | min)' | xargs)"
-    post_process "$max_width_desired" "$max_height_desired" "$imgpath"
+    post_process "$max_width_desired" "$max_height_desired" "$imgpath" "$mode_flag"
 }
 
 main() {
