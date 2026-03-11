@@ -9,15 +9,7 @@
     "error": "{{colors.error.default.hex}}",
     "errorForeground": "{{colors.on_error.default.hex}}",
     "success": "{{colors.tertiary.default.hex}}",
-    "warning": "{{colors.secondary.default.hex}}",
-    "syntax.comment": "{{colors.outline.default.hex}}",
-    "syntax.string": "{{colors.secondary.default.hex}}",
-    "syntax.keyword": "{{colors.primary.default.hex}}",
-    "syntax.variable": "{{colors.on_surface.default.hex}}",
-    "syntax.attribute": "{{colors.secondary.default.hex}}",
-    "syntax.property": "{{colors.primary.default.hex}}",
-    "syntax.function": "{{colors.tertiary.default.hex}}",
-    "syntax.constant": "{{colors.primary.default.hex}}"
+    "warning": "{{colors.secondary.default.hex}}"
   },
   "workbench.colorCustomizations": {
     "foreground": "{{colors.on_surface.default.hex}}",
@@ -300,85 +292,5 @@
     "textLink.foreground": "{{colors.primary.default.hex}}",
     "textLink.activeForeground": "{{colors.primary.default.hex}}",
     "icon.foreground": "{{colors.on_surface.default.hex}}"
-  },
-  "editor.tokenColorCustomizations": {
-    "textMateRules": [
-      {
-        "scope": ["comment", "punctuation.definition.comment"],
-        "settings": { "foreground": "{{colors.outline.default.hex}}", "fontStyle": "italic" }
-      },
-      {
-        "scope": ["string", "punctuation.definition.string"],
-        "settings": { "foreground": "{{colors.secondary.default.hex}}" }
-      },
-      {
-        "scope": ["keyword", "storage.type", "storage.modifier", "keyword.operator", "keyword.control", "punctuation.definition.template-expression"],
-        "settings": { "foreground": "{{colors.primary.default.hex}}" }
-      },
-      {
-        "scope": ["variable", "meta.objectliteral", "entity.name.tag", "punctuation.definition.tag"],
-        "settings": { "foreground": "{{colors.on_surface.default.hex}}" }
-      },
-      {
-        "scope": ["entity.other.attribute-name", "punctuation.separator.key-value.html"],
-        "settings": { "foreground": "{{colors.secondary.default.hex}}" }
-      },
-      {
-        "scope": ["variable.other", "punctuation.definition"],
-        "settings": { "foreground": "{{colors.primary.default.hex}}" }
-      },
-      {
-        "scope": ["support.variable", "support.function", "entity.name.function", "keyword.other", "support.type"],
-        "settings": { "foreground": "{{colors.tertiary.default.hex}}" }
-      },
-      {
-        "scope": ["constant", "support.constant", "keyword.other.unit", "entity.name.type"],
-        "settings": { "foreground": "{{colors.primary.default.hex}}" }
-      },
-      {
-        "scope": ["constant.numeric"],
-        "settings": { "foreground": "{{colors.secondary.default.hex}}" }
-      },
-      {
-        "scope": ["punctuation.separator", "punctuation.terminator", "meta.brace"],
-        "settings": { "foreground": "{{colors.outline.default.hex}}" }
-      },
-      {
-        "scope": ["invalid.illegal"],
-        "settings": { "foreground": "{{colors.error.default.hex}}" }
-      },
-      {
-        "scope": ["markup.heading", "entity.name.section"],
-        "settings": { "foreground": "{{colors.primary.default.hex}}", "fontStyle": "bold" }
-      },
-      {
-        "scope": ["markup.bold"],
-        "settings": { "foreground": "{{colors.secondary.default.hex}}", "fontStyle": "bold" }
-      },
-      {
-        "scope": ["markup.italic"],
-        "settings": { "foreground": "{{colors.primary.default.hex}}", "fontStyle": "italic" }
-      },
-      {
-        "scope": ["markup.inline.raw", "markup.fenced_code"],
-        "settings": { "foreground": "{{colors.secondary.default.hex}}" }
-      },
-      {
-        "scope": ["markup.underline.link"],
-        "settings": { "foreground": "{{colors.primary.default.hex}}" }
-      },
-      {
-        "scope": ["markup.inserted"],
-        "settings": { "foreground": "{{colors.tertiary.default.hex}}" }
-      },
-      {
-        "scope": ["markup.deleted"],
-        "settings": { "foreground": "{{colors.error.default.hex}}" }
-      },
-      {
-        "scope": ["markup.changed"],
-        "settings": { "foreground": "{{colors.secondary.default.hex}}" }
-      }
-    ]
   }
 }
