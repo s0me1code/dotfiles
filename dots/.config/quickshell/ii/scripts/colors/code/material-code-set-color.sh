@@ -64,7 +64,7 @@ import sys
 from pathlib import Path
 
 settings_path = Path(sys.argv[1])
-content = settings_path.read_text()
+content = settings_path.read_text() or "{}"
 normalized = re.sub(r',\s*([}\]])', r'\1', content)
 print(normalized, end="")
 PY
@@ -84,7 +84,7 @@ PY
         fi
     fi
 
-    if [[ -f "$generated_theme_json" ]]; then
+        if [[ -f "$generated_theme_json" ]]; then
         if printf '%s\n' "$normalized_json" | jq \
             --arg new_color "$new_color" \
             --arg theme_name "$theme_name" \
