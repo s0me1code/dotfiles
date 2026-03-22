@@ -29,13 +29,21 @@ new_color="$(cat "$COLOR_FILE_PATH")"
 
 vscode_dark_theme="${VSCODE_THEME_DARK:-Material Code}"
 vscode_light_theme="${VSCODE_THEME_LIGHT:-Material Code Light}"
-cursor_dark_theme="${CURSOR_THEME_DARK:-Default Dark Modern}"
-cursor_light_theme="${CURSOR_THEME_LIGHT:-Default Light Modern}"
+cursor_dark_theme="${CURSOR_THEME_DARK:-Material Code}"
+cursor_light_theme="${CURSOR_THEME_LIGHT:-Material Code Light}"
 
 if [[ "$mode_flag" == "dark" ]]; then
     generated_theme_json="$CURSOR_THEME_DIR/cursor-dark.json"
 else
     generated_theme_json="$CURSOR_THEME_DIR/cursor-light.json"
+fi
+
+_config_type=$(jq -r '.appearance.palette.type // "scheme-tonal-spot"' "${XDG_CONFIG_HOME:-$HOME/.config}/illogical-impulse/config.json" 2>/dev/null)
+[[ "$_config_type" == "auto" || -z "$_config_type" || "$_config_type" == "null" ]] && _config_type="scheme-tonal-spot"
+# Regenerate cursor theme JSON using hex color + correct scheme type (works without a TTY,
+# unlike image mode which fails when launched from QuickShell).
+if command -v matugen &>/dev/null; then
+    matugen color hex "$new_color" --mode "$mode_flag" --type "$_config_type"
 fi
 
 if ! command -v jq &>/dev/null; then
@@ -80,20 +88,98 @@ PY
         if printf '%s\n' "$normalized_json" | jq \
             --arg new_color "$new_color" \
             --arg theme_name "$theme_name" \
+            --arg mode_flag "$mode_flag" \
             --slurpfile matugen_theme "$generated_theme_json" \
             '(. * ($matugen_theme[0] // {}))
             | .["material-code.primaryColor"] = $new_color
-            | .["workbench.colorTheme"] = $theme_name' > "$tmp_settings"; then
+            | .["workbench.colorTheme"] = $theme_name
+            | .["material-code.colors"] = (
+                (.["material-code.colors"] // {})
+                | {
+                    foreground,
+                    mutedForeground,
+                    background,
+                    card,
+                    popover,
+                    hover,
+                    border,
+                    primary,
+                    primaryForeground,
+                    secondary,
+                    secondaryForeground,
+                    error,
+                    errorForeground,
+                    success,
+                    warning
+                }
+              )
+            | .["indentRainbow.colors"] = (
+                if ((($matugen_theme[0] // {})["indentRainbow.colors"] | type) == "array")
+                    and (((($matugen_theme[0] // {})["indentRainbow.colors"]) | length) > 0) then
+                    (($matugen_theme[0] // {})["indentRainbow.colors"])
+                else
+                    (if $mode_flag == "dark" then
+                        [
+                            ((.["material-code.colors"].primary // $new_color) + "28"),
+                            ((.["material-code.colors"].primary // $new_color) + "3c"),
+                            ((.["material-code.colors"].primary // $new_color) + "50"),
+                            ((.["material-code.colors"].primary // $new_color) + "64"),
+                            ((.["material-code.colors"].primary // $new_color) + "78"),
+                            ((.["material-code.colors"].primary // $new_color) + "8c"),
+                            ((.["material-code.colors"].primary // $new_color) + "a0"),
+                            ((.["material-code.colors"].primary // $new_color) + "b4")
+                        ]
+                    else
+                        [
+                            ((.["material-code.colors"].primary // $new_color) + "20"),
+                            ((.["material-code.colors"].primary // $new_color) + "32"),
+                            ((.["material-code.colors"].primary // $new_color) + "44"),
+                            ((.["material-code.colors"].primary // $new_color) + "56"),
+                            ((.["material-code.colors"].primary // $new_color) + "68"),
+                            ((.["material-code.colors"].primary // $new_color) + "7a"),
+                            ((.["material-code.colors"].primary // $new_color) + "8c"),
+                            ((.["material-code.colors"].primary // $new_color) + "9e")
+                        ]
+                    end)
+                end
+            )' > "$tmp_settings"; then
             mv "$tmp_settings" "$CODE_SETTINGS_PATH"
         else
+            true
             rm -f "$tmp_settings"
         fi
     else
         if printf '%s\n' "$normalized_json" | jq \
             --arg new_color "$new_color" \
             --arg theme_name "$theme_name" \
+            --arg mode_flag "$mode_flag" \
             '.["material-code.primaryColor"] = $new_color
-            | .["workbench.colorTheme"] = $theme_name' > "$tmp_settings"; then
+            | .["workbench.colorTheme"] = $theme_name
+            | .["indentRainbow.colors"] = (
+                if $mode_flag == "dark" then
+                    [
+                        ($new_color + "28"),
+                        ($new_color + "3c"),
+                        ($new_color + "50"),
+                        ($new_color + "64"),
+                        ($new_color + "78"),
+                        ($new_color + "8c"),
+                        ($new_color + "a0"),
+                        ($new_color + "b4")
+                    ]
+                else
+                    [
+                        ($new_color + "20"),
+                        ($new_color + "32"),
+                        ($new_color + "44"),
+                        ($new_color + "56"),
+                        ($new_color + "68"),
+                        ($new_color + "7a"),
+                        ($new_color + "8c"),
+                        ($new_color + "9e")
+                    ]
+                end
+            )' > "$tmp_settings"; then
             mv "$tmp_settings" "$CODE_SETTINGS_PATH"
         else
             rm -f "$tmp_settings"

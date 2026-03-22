@@ -1,0 +1,13 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "alt+[",
+    "command": "editor.fold",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+]",
+    "command": "editor.unfold",
+    "when": "editorTextFocus && !editorReadonly"
+  }
+]

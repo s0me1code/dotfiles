@@ -11,6 +11,16 @@
     "success": "{{colors.tertiary.default.hex}}",
     "warning": "{{colors.secondary.default.hex}}"
   },
+  "indentRainbow.colors": [
+    "{{colors.primary.default.hex}}28",
+    "{{colors.primary.default.hex}}3c",
+    "{{colors.primary.default.hex}}50",
+    "{{colors.primary.default.hex}}64",
+    "{{colors.primary.default.hex}}78",
+    "{{colors.primary.default.hex}}8c",
+    "{{colors.primary.default.hex}}a0",
+    "{{colors.primary.default.hex}}b4"
+  ],
   "workbench.colorCustomizations": {
     "foreground": "{{colors.on_surface.default.hex}}",
     "focusBorder": "{{colors.primary.default.hex}}80",

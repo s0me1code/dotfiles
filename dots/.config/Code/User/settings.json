@@ -1,6 +1,16 @@
 {
   "workbench.colorTheme": "Material Code",
   "workbench.colorCustomizations": {},
+  "indentRainbow.colors": [
+    "#c9c8ae55",
+    "#c9c7b65f",
+    "#c9c8a569",
+    "#ffb4ab73",
+    "#c9c8ae7d",
+    "#c9c7b687",
+    "#c9c8a591",
+    "#ffb4ab9b"
+  ],
   "material-code.primaryColor": "",
   "material-code.colors": {}
 }

@@ -8,5 +8,15 @@
         "key": "ctrl+alt+s",
         "command": "workbench.action.toggleUnifiedSidebarFromKeyboard",
         "when": "cursor.agentIdeUnification.enabled == true && !isAuxiliaryWindowFocusedContext"
+    },
+    {
+        "key": "alt+[",
+        "command": "editor.fold",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "alt+]",
+        "command": "editor.unfold",
+        "when": "editorTextFocus && !editorReadonly"
     }
 ]
