@@ -190,8 +190,10 @@ switch() {
     cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
     cursorposy_inverted=$((screensizey - cursorposy))
 
+    matugen_args=(--source-color-index 0)
+
     if [[ "$color_flag" == "1" ]]; then
-        matugen_args=(color hex "$color")
+        matugen_args+=(color hex "$color")
         generate_colors_material_args=(--color "$color")
     else
         if [[ -z "$imgpath" ]]; then
@@ -249,7 +251,7 @@ switch() {
             set_thumbnail_path "$thumbnail"
 
             if [ -f "$thumbnail" ]; then
-                matugen_args=(image "$thumbnail")
+                matugen_args+=(image "$thumbnail")
                 generate_colors_material_args=(--path "$thumbnail")
                 create_restore_script "$video_path"
             else
@@ -258,7 +260,7 @@ switch() {
                 exit 1
             fi
         else
-            matugen_args=(image "$imgpath")
+            matugen_args+=(image "$imgpath")
             generate_colors_material_args=(--path "$imgpath")
             # Update wallpaper path in config
             set_wallpaper_path "$imgpath"
@@ -314,6 +316,7 @@ switch() {
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
         > "$STATE_DIR"/user/generated/material_colors.scss
+    deactivate
     "$SCRIPT_DIR"/applycolor.sh
     refresh_tmux_colors
     deactivate
